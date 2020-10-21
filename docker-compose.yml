@@ -1,0 +1,26 @@
+version: "3.8"
+services: 
+    dev:
+        image: node:14
+        environment: 
+            - PORT=8080
+        volumes:
+            - type: bind
+              source: ./server/
+              target: /usr/src/app
+            - type: volume
+              source: nodemodules # name of the volume, see below
+              target: /usr/src/app/node_modules
+              volume:
+                nocopy: true
+        working_dir: /usr/src/app
+        command: > 
+                  sh -c "npm install -g nodemon &&
+                         npm install &&
+                         npm run dev"
+        ports: 
+            - "8080:8080"
+      # ffmpeg: 
+      #   build: ./ffmpeg
+volumes: 
+    nodemodules:

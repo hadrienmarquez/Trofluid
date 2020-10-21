@@ -1,0 +1,17 @@
+{
+    "name": "sandbox",
+    "version": "1.0.0",
+    "description": "Sandbox for server application using Express.js",
+    "author": "Maman",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "dev": "nodemon --legacy-watch ./server.js"
+    },
+    "dependencies": {
+        "express": "4.17.1",
+        "nodemon": "~2.0.4",
+        "moment": "2.29.0",
+        "uuid": "8.3.0"
+    }
+}

@@ -1,0 +1,117 @@
+:root{
+    font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
+
+    --text-primary: #b6b6b6;
+    --text-secondary: #ececec;
+    --error-color: #ff0033;
+    --bg-primary: #23232e;
+    --bg-secondary: #141418;
+    --transition-speed: 600ms;
+}
+
+body{
+    color: #cbc4dd;
+    background-color: #24242e;
+    margin: 0;
+    padding: 0;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    margin-top: 10px;
+    padding: 0;
+}
+
+header .logo{
+    margin: auto;
+    width: 500px;
+}
+
+.container{
+
+    height: 50vh;
+    margin: 12.5vh;
+    display: grid;
+    gap: 1rem;
+    padding: 10px;
+
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+}
+
+.button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #353535;
+    color: #fff;
+    font-size: 3rem;
+    border-radius: 4px;
+
+
+    transition: all 500ms;
+    overflow: hidden;
+}
+
+.button:hover{
+    box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
+    transform: scale(1.1) translateY(-3px);
+    cursor: pointer;
+}
+
+.popup-container{
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    transition: all 300ms;
+    background-color: var(--bg-secondary);
+    opacity: 0.8;
+    
+}
+
+.popup-container div {
+    background-color: black;
+    height: 40%;
+    width: 50%;
+    border-radius:10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-container div form{
+    height: 100%;
+    width: 50%;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+}
+
+.text-form{
+
+    color: var(--text-secondary);
+    opacity: 1;
+
+    transition: all 250ms;
+}
+
+.input-form{
+    background-color: var(--text-secondary);
+    width: 90%;
+    height: 15%;
+    padding:10px;
+    border-radius:10px;
+    opacity: 1;
+}
