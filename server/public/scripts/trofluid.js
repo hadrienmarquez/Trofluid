@@ -11,7 +11,7 @@ function closePopup(){
 
 function checkInPassphrase(){
 
-    const onlyAlphabetChar = /^[a-z]/i
+    const onlyAlphabetChar = /^[a-z]+$/gi
 
     // Length is valid?
     if(document.getElementById('popup').elements['passphrase-input'].value.length < 10){
