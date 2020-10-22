@@ -22,5 +22,10 @@ services:
             - "8080:8080"
       # ffmpeg: 
       #   build: ./ffmpeg
+      #   devices: "=========DEVICE NAME:dddd"
+      #   volumes:
+      #     - type: bind
+      #       source: /path/to/libDeckLinkAPI.so
+      #       target: /usr/lib/libDeckLinkAPI.so
 volumes: 
     nodemodules:
