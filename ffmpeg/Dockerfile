@@ -1,5 +1,5 @@
 # BUILD STAGE
-FROM alpine:3.12 as build-stage
+FROM alpine:3.12 AS build-stage
 
 ARG DIR=/tmp/build
 ARG PREFIX=/usr/local
@@ -48,15 +48,14 @@ zlib-dev" && \
 apk add --no-cache ${buildDeps}
 
 # Copying blackmagic SDK into source folder
-RUN mkdir -p ./ffmpeg_sources ./ffmpeg_build ./bin
-
+RUN mkdir -p ./ffmpeg_sources 
 COPY ./ffmpeg_sources ./ffmpeg_sources
 
 # Libsrt sources
 RUN cd ./ffmpeg_sources && \
     git clone https://github.com/Haivision/srt.git && \
     cd ./srt && \
-    ./configure --prefix="${DIR}/ffmpeg_build"  && \
+    ./configure --prefix="${PREFIX}"  && \
     make && make install
 
 # Downloading ffmpeg and extracting it
@@ -66,14 +65,15 @@ RUN cd ./ffmpeg_sources && \
     cd ./ffmpeg
 
 RUN cd ./ffmpeg_sources/ffmpeg && \ 
-    export PATH="${DIR}/bin:$PATH" PKG_CONFIG_PATH="${DIR}/ffmpeg_build/lib/pkgconfig:${DIR}/ffmpeg_sources/srt:$PATH" && \
+    export PATH="${PREFIX}/bin:$PATH" PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig:${PREFIX}/lib64/pkgconfig:$PATH" && \
     ./configure \
-        --prefix="${DIR}/ffmpeg_build" \
-        --extra-cflags="-I${DIR}/ffmpeg_build/include -I${DIR}/ffmpeg_sources/BMD_SDK/include" \
-        --extra-ldflags="-L${DIR}/ffmpeg_build/lib" \
+        --prefix="${PREFIX}" \
+        --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/BMD_SDK/include" \
+        --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs="-lpthread -lm" \
-        --bindir="${DIR}/bin" \
+        --bindir="${PREFIX}/bin" \
         --enable-gpl \
+        --enable-shared \
         --enable-libmp3lame \
         --enable-gnutls \
         --enable-libass \
@@ -88,11 +88,22 @@ RUN cd ./ffmpeg_sources/ffmpeg && \
 
 RUN bash && \
     cd ./ffmpeg_sources/ffmpeg && \
-    make -j `nproc` && \
+    make -j4 && \
     make install && \
     hash -r
 
-ENV PATH="${DIR}/bin:$PATH" 
-ENV LD_LIBRARY_PATH="${DIR}/ffmpeg_sources/srt"
+RUN rm -rf ${DIR}
 
-ENTRYPOINT ["bash"]
+# RELEASE STAGE
+FROM build-stage AS release-stage
+
+ARG DIR=/usr/local
+
+WORKDIR ${DIR}
+
+COPY --from=build-stage ${DIR} .
+
+ENV PATH=${DIR}/bin:$PATH 
+ENV LD_LIBRARY_PATH=${DIR}/lib:${DIR}/lib64
+
+ENTRYPOINT ["sh"]
