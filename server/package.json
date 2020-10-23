@@ -6,7 +6,8 @@
     "main": "server.js",
     "type": "module",
     "scripts": {
-        "dev": "nodemon --legacy-watch ./server.js"
+        "dev": "nodemon --legacy-watch ./server.js",
+        "release": "node ./server.js"
     },
     "dependencies": {
         "express": "4.17.1",

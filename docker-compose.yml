@@ -1,6 +1,6 @@
 version: "3.8"
 services: 
-    dev:
+    server:
         image: node:14
         environment: 
             - PORT=8080
@@ -17,11 +17,20 @@ services:
         command: > 
                   sh -c "npm install -g nodemon &&
                          npm install &&
-                         npm run dev"
+                         npm run release" 
         ports: 
             - "8080:8080"
-      # ffmpeg: 
-      #   build: ./ffmpeg
+        networks:
+          net:
+            aliases:
+              - server
+    ffmpeg: 
+        build: ./ffmpeg
+        tty: true
+        networks:
+          net:
+            aliases:
+              - ffmpeg
       #   devices: "=========DEVICE NAME:dddd"
       #   volumes:
       #     - type: bind
@@ -29,3 +38,6 @@ services:
       #       target: /usr/lib/libDeckLinkAPI.so
 volumes: 
     nodemodules:
+
+networks: 
+  net:

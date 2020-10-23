@@ -109,4 +109,4 @@ COPY --from=build-stage ${DIR} .
 ENV PATH=${DIR}/bin:$PATH 
 ENV LD_LIBRARY_PATH=${DIR}/lib:${DIR}/lib64
 
-ENTRYPOINT ["sh"]
+ENTRYPOINT [ "bash" ]
