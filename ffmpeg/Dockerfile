@@ -64,11 +64,12 @@ RUN cd ./ffmpeg_sources && \
     tar xjvf ffmpeg-snapshot.tar.bz2 && \
     cd ./ffmpeg
 
+# FFmpeg Configure
 RUN cd ./ffmpeg_sources/ffmpeg && \ 
     export PATH="${PREFIX}/bin:$PATH" PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig:${PREFIX}/lib64/pkgconfig:$PATH" && \
     ./configure \
         --prefix="${PREFIX}" \
-        --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/BMD_SDK/include" \
+        --extra-cflags="-I${PREFIX}/include -I${DIR}/ffmpeg_sources/BMD_SDK/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs="-lpthread -lm" \
         --bindir="${PREFIX}/bin" \
@@ -86,12 +87,14 @@ RUN cd ./ffmpeg_sources/ffmpeg && \
         --enable-decklink \
         --enable-libsrt 
 
+# Compile FFmpeg
 RUN bash && \
     cd ./ffmpeg_sources/ffmpeg && \
     make -j4 && \
     make install && \
     hash -r
 
+# Clean directory before going to release stage
 RUN rm -rf ${DIR}
 
 # RELEASE STAGE
