@@ -63,6 +63,7 @@ function submitPassphrase(e){
         fetch(request)
         .then((res) => res.json)
         .then((res) => {
+            // WHAT TO DO WITH RESPONSE
             console.log(res);
         }).catch((err) => {
             console.log(err);
