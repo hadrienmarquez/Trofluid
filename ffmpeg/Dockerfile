@@ -70,7 +70,7 @@ RUN cd ./ffmpeg_sources/ffmpeg && \
     ./configure \
         --prefix="${PREFIX}" \
         --extra-cflags="-I${PREFIX}/include -I${DIR}/ffmpeg_sources/BMD_SDK/include" \
-        --extra-ldflags="-L${PREFIX}/lib" \
+        --extra-ldflags="-L${PREFIX}/lib -L${PREFIX}/lib64" \
         --extra-libs="-lpthread -lm" \
         --bindir="${PREFIX}/bin" \
         --enable-gpl \
@@ -102,11 +102,25 @@ FROM build-stage AS release-stage
 
 ARG DIR=/usr/local
 
+
 WORKDIR ${DIR}
+
+VOLUME [ “/sys/fs/cgroup” ]
 
 COPY --from=build-stage ${DIR} .
 
 ENV PATH=${DIR}/bin:$PATH 
 ENV LD_LIBRARY_PATH=${DIR}/lib:${DIR}/lib64
 
-ENTRYPOINT [ "bash" ]
+# Copying ssh init script into container
+COPY ./entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
+# Dependencies for ssh setup
+RUN apk add --no-cache openssh-server openrc
+
+# Preparing user for ssh access
+RUN adduser ffmpeg --disabled-password && \
+    echo 'ffmpeg:root' | chpasswd
+
+ENTRYPOINT [  "./entrypoint.sh"  ]

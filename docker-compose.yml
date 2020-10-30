@@ -13,11 +13,17 @@ services:
               target: /usr/src/app/node_modules
               volume:
                 nocopy: true
+            - type: volume
+              source: sshpublic
+              target: /usr/src/app/ssh_public
+              volume:
+                nocopy: true
         working_dir: /usr/src/app
         command: > 
-                  sh -c "npm install -g nodemon &&
+                  sh -c "./entrypoint.sh && 
+                         npm install -g nodemon &&
                          npm install &&
-                         npm run release" 
+                         npm run dev" 
         ports: 
             - "8080:8080"
         networks:
@@ -25,12 +31,21 @@ services:
             aliases:
               - server
     ffmpeg: 
+        depends_on: 
+          - server
         build: ./ffmpeg
         tty: true
         networks:
           net:
             aliases:
               - ffmpeg
+        volumes:
+          - type: volume
+            source: sshpublic
+            target: /usr/local/ssh_public
+            volume:
+              nocopy: true
+        # command: ./entrypoint.sh
       #   devices: "=========DEVICE NAME:dddd"
       #   volumes:
       #     - type: bind
@@ -38,6 +53,7 @@ services:
       #       target: /usr/lib/libDeckLinkAPI.so
 volumes: 
     nodemodules:
+    sshpublic:
 
 networks: 
   net:
