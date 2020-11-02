@@ -80,14 +80,3 @@ function submitPassphrase(e){
 // Binding the event listener to the form and the submitPassphrase function
 document.getElementById('popup').addEventListener('submit', submitPassphrase);
 
-
-
-function stopStream(){
-    fetch('/api/trofluid/stop')
-    .then((res) => res.json)
-    .then((res) => {
-        console.log(res);
-    }).catch((err) => {
-        console.log(err);
-    });
-};
