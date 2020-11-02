@@ -23,7 +23,7 @@ services:
                   sh -c "./entrypoint.sh && 
                          npm install -g nodemon &&
                          npm install &&
-                         npm run dev" 
+                         npm run start" 
         ports: 
             - "8080:8080"
         networks:
@@ -45,7 +45,6 @@ services:
             target: /usr/local/ssh_public
             volume:
               nocopy: true
-        # command: ./entrypoint.sh
       #   devices: "=========DEVICE NAME:dddd"
       #   volumes:
       #     - type: bind
