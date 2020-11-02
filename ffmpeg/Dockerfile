@@ -55,7 +55,7 @@ COPY ./ffmpeg_sources ./ffmpeg_sources
 RUN cd ./ffmpeg_sources && \
     git clone https://github.com/Haivision/srt.git && \
     cd ./srt && \
-    ./configure --prefix="${PREFIX}"  && \
+    ./configure --prefix="${PREFIX}" && \
     make && make install
 
 # Downloading ffmpeg and extracting it
@@ -105,16 +105,14 @@ ARG DIR=/usr/local
 
 WORKDIR ${DIR}
 
-VOLUME [ “/sys/fs/cgroup” ]
-
 COPY --from=build-stage ${DIR} .
 
 ENV PATH=${DIR}/bin:$PATH 
-ENV LD_LIBRARY_PATH=${DIR}/lib:${DIR}/lib64
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${DIR}/lib:${DIR}/lib64
 
-# Copying ssh init script into container
-COPY ./entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+# Copying ssh scripts into container
+COPY ./scripts ./scripts
+RUN chmod +x ./scripts
 
 # Dependencies for ssh setup
 RUN apk add --no-cache openssh-server openrc
@@ -123,4 +121,4 @@ RUN apk add --no-cache openssh-server openrc
 RUN adduser ffmpeg --disabled-password && \
     echo 'ffmpeg:root' | chpasswd
 
-ENTRYPOINT [  "./entrypoint.sh"  ]
+ENTRYPOINT [  "./scripts/entrypoint.sh"  ]
