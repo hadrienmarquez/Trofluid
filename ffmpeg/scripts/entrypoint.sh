@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /usr/local
+
 # Adding ssh to service list on 'default' runlevel
 rc-update add sshd default
 
