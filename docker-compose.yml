@@ -30,7 +30,8 @@ services:
           net:
             aliases:
               - server
-    ffmpeg: 
+    ffmpeg:
+        privileged: true
         depends_on: 
           - server
         build: ./ffmpeg
@@ -53,6 +54,9 @@ services:
             target: /usr/lib/blackmagic
         devices: 
           - "/dev/blackmagic/dv0:/dev/blackmagic/dv0"
+        ports:
+          - "7000:7000/udp"
+          - "8888:8888/udp"
 volumes: 
     nodemodules:
     sshpublic:
