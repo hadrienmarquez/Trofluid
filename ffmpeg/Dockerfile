@@ -1,51 +1,45 @@
 # BUILD STAGE
-FROM alpine:3.12 AS build-stage
+FROM ubuntu:20.04 AS build-stage
 
 ARG DIR=/tmp/build
 ARG PREFIX=/usr/local
 
 WORKDIR ${DIR}
 
-RUN apk update && \
-    apk upgrade
+ENV TZ=Europe/Paris
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN buildDeps="autoconf \
-automake \
-bash \
-binutils \
-bzip2 \
-cmake \
-git  \
-libass-dev \
-gnutls-dev \
-freetype-dev \
-lame-dev \
-sdl-dev \
-libtool \
-libva-dev \
-libvdpau-dev \
-libvorbis-dev \
-x264-dev \
-x265-dev \
-numactl-dev \
-fdk-aac-dev \
-coreutils \
-diffutils \
-expat-dev \
-file \
-g++ \
-gcc \
-gperf \
-libtool \
-make \
-tar \
-tcl \
-texinfo \
-openssl-dev \
-wget \
-yasm \
-zlib-dev" && \ 
-apk add --no-cache ${buildDeps}
+  automake \
+  build-essential \
+  cmake \
+  libass-dev \
+  libfreetype6-dev \
+  libgnutls28-dev \
+  libsdl2-dev \
+  libtool \
+  libva-dev \
+  libvdpau-dev \
+  libvorbis-dev \
+  libxcb1-dev \
+  libxcb-shm0-dev \
+  libxcb-xfixes0-dev \
+  libx264-dev \
+  libx265-dev \
+  libnuma-dev \
+  libfdk-aac-dev \
+  libmp3lame-dev \
+  pkg-config \
+  texinfo \
+  wget \
+  yasm \
+  zlib1g-dev \
+  libssl-dev \
+  tclsh \
+  git \
+  ca-certificates" && \
+apt-get -yqq update && \
+apt-get install -yq --no-install-recommends ${buildDeps} 
 
 # Copying blackmagic SDK into source folder
 RUN mkdir -p ./ffmpeg_sources 
@@ -92,13 +86,19 @@ RUN bash && \
     cd ./ffmpeg_sources/ffmpeg && \
     make -j4 && \
     make install && \
+    make distclean && \
     hash -r
 
-# Clean directory before going to release stage
-RUN rm -rf ${DIR}
+# Clean before going to release stage
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${PREFIX}/lib:${PREFIX}/lib64
+RUN ldd ${PREFIX}/bin/ffmpeg | grep /lib/x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp {} ${PREFIX}/lib/ && \
+    rm -rf ${DIR} && \
+    rm -rf /var/lib/apt/lists/* && \
+    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+
 
 # RELEASE STAGE
-FROM build-stage AS release-stage
+FROM ubuntu:20.04 AS release-stage
 
 ARG DIR=/usr/local
 
@@ -115,7 +115,12 @@ COPY ./scripts ./scripts
 RUN chmod +x ./scripts
 
 # Dependencies for ssh setup
-RUN apk add --no-cache openssh-server openrc
+# RUN apk add --no-cache openssh-server openrc
+RUN sshDeps="openssh-server \
+    ca-certificates" && \
+    apt-get -yqq update && \
+    apt-get install -yq --no-install-recommends ${sshDeps} && \
+    rm -rf /var/lib/apt/lists/*
 
 # Preparing user for ssh access
 RUN adduser ffmpeg --disabled-password && \

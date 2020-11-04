@@ -48,9 +48,9 @@ services:
           - type: bind
             source: /usr/lib/libDeckLinkAPI.so
             target: /usr/lib/libDeckLinkAPI.so
-          #- type: bind
-          #  source: /usr/lib/blackmagic
-          #  target: /usr/lib/blackmagic
+          - type: bind
+            source: /usr/lib/blackmagic
+            target: /usr/lib/blackmagic
         devices: 
           - "/dev/blackmagic/dv0:/dev/blackmagic/dv0"
 volumes: 
