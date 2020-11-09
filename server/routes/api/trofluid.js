@@ -43,7 +43,7 @@ const testStopFluid = {
     msg: "Le button est connecté avec le serveur - STOP"
 }
 
-    // Open ssh with communication with ffmpeg server and launch stream
+    // Open ssh with communication with ffmpeg server and stop stream
     const cmd = spawn("ssh ffmpeg@trofluid_ffmpeg_1 bash -c '/usr/local/scripts/stopStream.sh'", {shell: true});
 
     cmd.stdout.on('data', (data) => {
@@ -61,9 +61,6 @@ const testStopFluid = {
     cmd.on('close', (code) => {
         console.log(`Process exited with code ${code}`);
     });
-
-    // Sends JSON, no need to stringify express takes care of everything
-   // res.json(testStopFluid);
 });
 
 export default router;

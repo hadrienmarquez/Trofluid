@@ -110,10 +110,6 @@ COPY --from=build-stage ${DIR} .
 ENV PATH=${DIR}/bin:$PATH 
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${DIR}/lib:${DIR}/lib64
 
-# Copying ssh scripts into container
-COPY ./scripts ./scripts
-RUN chmod +x ./scripts
-
 # Dependencies for ssh setup
 # RUN apk add --no-cache openssh-server openrc
 RUN sshDeps="openssh-server \
@@ -121,6 +117,10 @@ RUN sshDeps="openssh-server \
     apt-get -yqq update && \
     apt-get install -yq --no-install-recommends ${sshDeps} && \
     rm -rf /var/lib/apt/lists/*
+
+# Copying ssh scripts into container
+COPY ./scripts ./scripts
+RUN chmod +x ./scripts
 
 # Preparing user for ssh access
 RUN adduser ffmpeg --disabled-password && \
