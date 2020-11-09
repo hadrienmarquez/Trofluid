@@ -15,22 +15,22 @@ router.post('/start', (req,res) =>{
     
     console.log(_passPhrase);
 
-    // Open ssh with communication with ffmpeg server
-    const ls = spawn("ssh ffmpeg@trofluid_ffmpeg_1 bash -c '/usr/local/scripts/startStream.sh'", {shell: true});
+    // Open ssh with communication with ffmpeg server and launch stream
+    const cmd = spawn("ssh ffmpeg@trofluid_ffmpeg_1 bash -c '/usr/local/scripts/startStream.sh'", {shell: true});
 
-    ls.stdout.on('data', (data) => {
+    cmd.stdout.on('data', (data) => {
         console.log(`Stdout: ${data}`);
     });
 
-    ls.stderr.on('data', (data) => {
+    cmd.stderr.on('data', (data) => {
         console.log(`Stderr: ${data}`);
     });
 
-    ls.on('error', (error) => {
+    cmd.on('error', (error) => {
         console.log(`Error: ${error.messages}`);
     });
 
-    ls.on('close', (code) => {
+    cmd.on('close', (code) => {
         console.log(`Process exited with code ${code}`);
     });
 
@@ -43,8 +43,27 @@ const testStopFluid = {
     msg: "Le button est connecté avec le serveur - STOP"
 }
 
+    // Open ssh with communication with ffmpeg server and launch stream
+    const cmd = spawn("ssh ffmpeg@trofluid_ffmpeg_1 bash -c '/usr/local/scripts/stopStream.sh'", {shell: true});
+
+    cmd.stdout.on('data', (data) => {
+        console.log(`Stdout: ${data}`);
+    });
+
+    cmd.stderr.on('data', (data) => {
+        console.log(`Stderr: ${data}`);
+    });
+
+    cmd.on('error', (error) => {
+        console.log(`Error: ${error.messages}`);
+    });
+
+    cmd.on('close', (code) => {
+        console.log(`Process exited with code ${code}`);
+    });
+
     // Sends JSON, no need to stringify express takes care of everything
-    res.json(testStopFluid);
+   // res.json(testStopFluid);
 });
 
 export default router;
