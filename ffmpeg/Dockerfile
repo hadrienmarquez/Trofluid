@@ -122,6 +122,8 @@ RUN sshDeps="openssh-server \
 COPY ./scripts ./scripts
 RUN chmod +x ./scripts
 
+COPY ./sources ./sources
+
 # Preparing user for ssh access
 RUN adduser ffmpeg --disabled-password && \
     echo 'ffmpeg:root' | chpasswd
