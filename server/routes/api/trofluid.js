@@ -12,11 +12,21 @@ const router = express.Router();
 router.post('/start', (req,res) =>{
 
     const _passPhrase = req.body.passphrase;
+    const _source = req.body.source;
     
-    console.log(_passPhrase);
+    let _scriptCMD = '/usr/local/scripts/startStream.sh';
+
+    if(req.body.skip_passphrase)
+    {
+        _scriptCMD += ` -s ${_source}`;
+    } else {
+        _scriptCMD += ` -s ${_source} -p ${_passPhrase}`
+    }
+
+    console.log(_scriptCMD);
 
     // Open ssh with communication with ffmpeg server and launch stream
-    const cmd = spawn("ssh ffmpeg@trofluid_ffmpeg_1 bash -c '/usr/local/scripts/startStream.sh'", {shell: true});
+    const cmd = spawn(`ssh ffmpeg@trofluid_ffmpeg_1 "bash -c '${_scriptCMD}'"`, {shell: true});
 
     cmd.stdout.on('data', (data) => {
         console.log(`Stdout: ${data}`);
@@ -34,7 +44,6 @@ router.post('/start', (req,res) =>{
         console.log(`Process exited with code ${code}`);
     });
 
-    // res.json(testStartFluid);
 });
 
 router.get('/stop', (req,res) =>{
