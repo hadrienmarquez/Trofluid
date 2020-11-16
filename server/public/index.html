@@ -21,10 +21,26 @@
     <section class="popup-container" >
         
         <div>
+            <div class="checkboxes">
+                <h3 class="text-form">Source : </h3>
+                <div>
+                    <input type="radio" id="decklink" name="source" checked="checked" value='decklink'>
+                    <label for="horns">Decklink</label>    
+                </div>
+
+                <div>
+                    <input type="radio" id="mire" name="source" value='mire'>
+                    <label for="horns">Mire</label>
+                </div>
+
+            </div>
+
             <form id="popup">
                 <h3 class="text-form">Passphrase must be at least ten alphabetic characters.</h3>
                 <input autocomplete="off" type="text" placeholder="Passphrase" name="passphrase-input" class="input-form" required>
+                <div class="button" onclick="skipPassphrase()"><h2>Skip</h2></div>
             </form>
+            
         </div>
     </section>
 

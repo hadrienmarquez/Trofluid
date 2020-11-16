@@ -17,6 +17,8 @@ body{
     padding: 0;
 }
 
+
+
 header{
     display: flex;
     align-items: center;
@@ -28,6 +30,7 @@ header{
 header .logo{
     margin: auto;
     width: 500px;
+
 }
 
 .container{
@@ -43,6 +46,7 @@ header .logo{
 }
 
 .button{
+    height: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,6 +60,7 @@ header .logo{
     transition: all 500ms;
     overflow: hidden;
 }
+
 
 .button:hover{
     box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
@@ -75,36 +80,99 @@ header .logo{
 
     transition: all 300ms;
     background-color: var(--bg-secondary);
-    opacity: 0.8;
+    opacity: 0.9;
     
 }
 
 .popup-container div {
     background-color: black;
-    height: 40%;
-    width: 50%;
+    height: 40vh;
+    width: 50vw;
     border-radius:10px;
 
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    padding: 3px 5px;
 }
 
-.popup-container div form{
-    height: 100%;
-    width: 50%;
+.popup-container  div.checkboxes {
+    margin: 0;
+    padding: 0;
+    height: 20%;
+    width: 100%;
 
     display: grid;
     grid-template-rows: 1fr 1fr;
-    gap: 1rem;
-}
-
-.text-form{
+    grid-template-columns: 2fr 1fr;
 
     color: var(--text-secondary);
     opacity: 1;
+    font-size: 1em;
+    gap: 0.5rem;
+}
+
+
+.popup-container  div.checkboxes div{
+    height: 100%;
+    width: 98%;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    grid-column: 2 / end;
+}
+
+.popup-container div.checkboxes  h3.text-form{
+    height: 100%;
+    grid-column: 1 / 2;
+    grid-row: 1/ 2;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+
+
+.popup-container > div > form{
+    height: 65%;
+    width: 100%;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 2fr minmax(150px, auto);
+    gap: 1rem;
+}
+
+
+form > .button {
+    height: 45%;
+    max-height: 45px;
+    width: 70%;
+    font-size: 18px;
+    opacity: 1;
+    background-color: #353535;
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    align-self: start;
+    justify-self: end;
+    
+}
+
+form > .button > h2 {
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+}
+
+.text-form{
+    color: var(--text-secondary);
+    opacity: 1;
+    font-size: 1em;
 
     transition: all 250ms;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    align-self: end;
 }
 
 .input-form{
@@ -114,4 +182,7 @@ header .logo{
     padding:10px;
     border-radius:10px;
     opacity: 1;
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    align-self: start;
 }
