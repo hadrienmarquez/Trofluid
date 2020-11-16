@@ -23,7 +23,7 @@ services:
                   sh -c "./entrypoint.sh && 
                          npm install -g nodemon &&
                          npm install &&
-                         npm run start" 
+                         npm run release" 
         ports: 
             - "8080:8080"
         networks:
