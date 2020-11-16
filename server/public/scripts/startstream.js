@@ -34,17 +34,24 @@ function checkInPassphrase(){
 
 };
 
-
 // Funtion added to the event listener binded to the passphrase form
 function submitPassphrase(e){
     // Prevent default submit action
     e.preventDefault();
 
     if(checkInPassphrase()){
+        let source;
+        if(document.getElementById('decklink').checked) {
+            source = 'decklink';
+         } else if(document.getElementById('mire').checked) {
+            source = 'Bars_legal.0000000.jpg';
+        }
 
         // Populating JSON with form data
         let formValue = {
-            passphrase: document.getElementById('popup').elements['passphrase-input'].value
+            passphrase: document.getElementById('popup').elements['passphrase-input'].value,
+            source: source, 
+            skip_passphrase: false
         };
 
         // Cleaning the input value
@@ -75,6 +82,49 @@ function submitPassphrase(e){
     }
 
 };
+
+
+function skipPassphrase() {
+    let source;
+    if(document.getElementById('decklink').checked) {
+        source = 'decklink';
+     } else if(document.getElementById('mire').checked) {
+        source = 'Bars_legal.0000000.jpg';
+    }
+
+    // Populating JSON with form data
+    let formValue = {
+        passphrase: 'none',
+        source: source,    
+        skip_passphrase: true
+    };
+
+    // Cleaning the input value
+    document.getElementById('popup').elements['passphrase-input'].value = "";
+    
+    // create request object
+    const request = new Request('/api/trofluid/start', {
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify(formValue)
+    });
+
+    // Send request
+    fetch(request)
+    .then((res) => res.json)
+    .then((res) => {
+        // WHAT TO DO WITH RESPONSE
+        console.log(res);
+    }).catch((err) => {
+        console.log(err);
+    });
+
+    // Removing popup
+    closePopup();
+
+}
 
 
 // Binding the event listener to the form and the submitPassphrase function
